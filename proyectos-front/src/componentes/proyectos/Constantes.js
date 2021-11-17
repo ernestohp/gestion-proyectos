@@ -1,0 +1,1 @@
+export const DAFAULT_TEMPLATE = "IVS"

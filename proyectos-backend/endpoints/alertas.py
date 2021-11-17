@@ -23,7 +23,7 @@ def lista_usuarios():
 def create_usuario():
     try:
         usuario_json = request.json['usuarioAlerta']
-        print("usuaio", usuario_json)
+        print("usuario", usuario_json)
         correo = usuario_json['email']
         hmin   = usuario_json['horas_min']
         hmax   = usuario_json['horas_max']
@@ -32,8 +32,9 @@ def create_usuario():
         alerta1   = usuario_json['alerta1']
         alerta2   = usuario_json['alerta2']
         alerta3   = usuario_json['alerta3']
+        extras    = usuario_json['extras']
 
-        data = (correo, hmin, hmax, id, name, alerta1, alerta2, alerta3)
+        data = (correo, hmin, hmax, id, name, alerta1, alerta2, alerta3, extras)
         i = alertasdb.insertar_usuario(data)
         response=""
         if (i==1):

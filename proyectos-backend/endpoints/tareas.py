@@ -28,7 +28,9 @@ def tareas_por_proyecto(id):
 @tarea_bp.route("/tareas", methods=['POST', 'GET'])
 def grabar_tareas():
     try:
+        print("grabando tareas...")
         tareas_json = request.json["tareas"]
+        print("tareas_json,",tareas_json)
         for t in tareas_json:
             plantilla_id = t["id"]
             proyecto_id = t['proyecto']

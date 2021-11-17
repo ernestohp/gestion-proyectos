@@ -14,7 +14,7 @@ def grabar_proyecto_tareas():
         descripcion = proyecto_json['descripcion']
         # print("nombre %s, descripcion %s" %(nombre, descripcion))
         id_project=openproject.create_update_project(nombre, descripcion)
-        print(id_project)
+        print("OPP, código de proyecto",id_project)
 
         #Crear tareas----
         print("OPP, Inicio de crear tareas para proyecto %s" % nombre)

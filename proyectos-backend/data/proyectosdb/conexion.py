@@ -11,7 +11,7 @@ def create_connection():
         conn = psycopg2.connect(
                         host=HOST,
                         database=DATABASE, user=USER,
-                        password="anirak")
+                        password=PASSWORD)
     except:
         print("Error al conectarse a la BD")
 

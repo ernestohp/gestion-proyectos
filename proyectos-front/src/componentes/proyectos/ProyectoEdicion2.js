@@ -91,6 +91,7 @@ const ProyectoEdicion2 = ({personas}) => {
         const respuestaGrabar = await apiProyectos.grabarTareas(tareasFinalBorrador);
         console.log(respuestaGrabar)
         //Grabar descripcion del proyecto------
+        proyecto.estado_id = 2
         const respDescripcion = await apiProyectos.grabarProyectoDescripcion(proyecto);
         console.log(respDescripcion)
 

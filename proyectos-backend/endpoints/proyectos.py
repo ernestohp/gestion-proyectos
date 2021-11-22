@@ -141,7 +141,7 @@ def lista_amanagers():
 @pro_bp.route("/proyecto/descripcion", methods=['POST', 'GET'])
 def actualizar_descripcion():
     proyecto_json = request.json["proyecto"]
-    data = (proyecto_json['descripcion'], proyecto_json['id'])
+    data = (proyecto_json['descripcion'], proyecto_json['estado_id'], proyecto_json['id'])
     id_grabar = proyectos.actualizar_proyecto_descripcion(data)
 
     if id_grabar:

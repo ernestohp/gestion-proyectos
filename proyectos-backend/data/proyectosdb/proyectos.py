@@ -90,7 +90,7 @@ def actualizar_proyecto_descripcion(data):
     conn = create_connection()
     sql = """
             UPDATE public."proyecto" 
-            SET descripcion = (%s)
+            SET descripcion = (%s), estado = (%s)
             WHERE id = (%s)
             """
     try:

@@ -139,3 +139,8 @@ INSERT INTO public.proyecto_estado(id, nombre)	VALUES (3, 'Cerrado');
 INSERT INTO public.proyecto_estado(id, nombre)	VALUES (100, 'Ganado');
 
 
+--Insertar en la tabla SELECT name, value1, value2 	FROM public.usuario_alerta_param;
+INSERT INTO public.usuario_alerta_param(name,value1,value2) 
+VALUES ('frecuencia_sup','mensual', 'ultima_sem');
+INSERT INTO public.usuario_alerta_param(name,value1,value2) 
+VALUES ('frecuencia_usuario','mensual', 'ultima_dia')	

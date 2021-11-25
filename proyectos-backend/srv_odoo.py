@@ -9,13 +9,13 @@ from data.clockify import mail_params
 from data.clockify import mail
 
 from data.proyectosdb import clientes
-from data.proyectosdb import amanagers
 from data.proyectosdb import proyectos
-from data.proyectosdb import powners
 from data.proyectosdb import personas
 from data.proyectosdb import calendario
 
 URL_APP_PROYECTOS="http://localhost:3000"
+MODE_ODOO_CUSTOM = False
+
 
 def get_data_from_odoo():
     #-----Empleados-------
@@ -74,23 +74,20 @@ def get_data_from_odoo():
     #lista_amanagers = amanagers.lista_amanager()
     amanagers_odoo = util.obtener_valores_unicos(proyectos_ganados,'user_id')
     amanagers_emps = util.filtrar_emps_1(personas_odoo, 'name', amanagers_odoo)
-    # amanagers_ids = util.obtener_ids(amanagers_odoo)
-    # amanagers_odoo = account_managers.get_amanagers_ids(amanagers_ids)
-    # nuevos_amanagers = util.obtener_diferencial2(amanagers_odoo,lista_amanagers)
     print("AManagers: ",amanagers_emps)
     for c in amanagers_emps:
         data = (1,c['id'])
-        #amanagers.insertar_amanager(data)
         personas.actualizar_account_manager(data)
 
 
     #---Grabar Project Owner -------
-    # powner_odoo = util.obtener_valores_unicos(proyectos_ganados,'x_project_owner')
-    # powner_emps = util.filtrar_emps_2(personas_odoo, 'name', powner_odoo)
-    # print("POwners: ",powner_emps)
-    # for c in powner_emps:
-    #     data = (1,c['id'])
-    #     personas.actualizar_project_owner(data)
+    if MODE_ODOO_CUSTOM:
+        powner_odoo = util.obtener_valores_unicos(proyectos_ganados,'x_project_owner')
+        powner_emps = util.filtrar_emps_2(personas_odoo, 'name', powner_odoo)
+        print("POwners: ",powner_emps)
+        for c in powner_emps:
+            data = (1,c['id'])
+            personas.actualizar_project_owner(data)
 
     #---Grabar proyectos -------
     estado_ganado=params_odoo.ESTADO_GANADO
@@ -102,19 +99,28 @@ def get_data_from_odoo():
     for p in proyectos_mod_ins:
         amanager_id = util.get_id(amanagers_emps, p['user_id'][1])
         pwoner_id = 1
-        # pwoner_id = util.get_id(powner_emps, p['x_project_owner'])
+        if MODE_ODOO_CUSTOM:
+            pwoner_id = util.get_id(powner_emps, p['x_project_owner'])
         horas_estimadas = util.getHorasEstimadas(p)
+        date_dead_line = None if not p['date_deadline'] else p['date_deadline']
+        data = None
         if p['id'] not in ids_proyectos_db:
-            data = (p['display_name'],p['date_deadline'],estado_ganado, 
+            if MODE_ODOO_CUSTOM:
+                data = (p['display_name'],date_dead_line,estado_ganado, 
                     p['partner_id'][0], pwoner_id, amanager_id, p['expected_revenue'],
-                    horas_estimadas
-                    # ,p['x_prev_final'], 
-                    # p['x_fecha_hito_1'], p['x_fecha_hito_2'], p['x_fecha_hito_3'],
-                    # p['x_fecha_hito_4'], p['x_fecha_hito_5'], p['x_fecha_hito_6'],
-                    # p['x_importe_hito_1'], p['x_importe_hito_2'], p['x_importe_hito_3'],
-                    # p['x_importe_hito_4'], p['x_importe_hito_5'], p['x_importe_hito_6']
-                    ,p['id'])
-            proyectos.insertar_proyecto(data)
+                    horas_estimadas,
+                    p['x_prev_final'], 
+                    p['x_fecha_hito_1'], p['x_fecha_hito_2'], p['x_fecha_hito_3'],
+                    p['x_fecha_hito_4'], p['x_fecha_hito_5'], p['x_fecha_hito_6'],
+                    p['x_importe_hito_1'], p['x_importe_hito_2'], p['x_importe_hito_3'],
+                    p['x_importe_hito_4'], p['x_importe_hito_5'], p['x_importe_hito_6'],
+                    p['id'])
+            else:
+                data = (p['display_name'],date_dead_line,estado_ganado, 
+                    p['partner_id'][0], pwoner_id, amanager_id, p['expected_revenue'],
+                    horas_estimadas,
+                    p['id'])
+            proyectos.insertar_proyecto(data, MODE_ODOO_CUSTOM)
             
             #---enviar email---
             personas_db_new = personas.lista_personas()
@@ -123,19 +129,25 @@ def get_data_from_odoo():
             mensaje = get_mensaje_email(p)
             mail.enviar_correo_con_cc(mail_params.MAIL_FROM, emails_to, emails_cc, asunto, mensaje)
         else:
-            data = (p['display_name'],p['date_deadline'],
+            if MODE_ODOO_CUSTOM:
+                data = (p['display_name'],date_dead_line,
                     p['partner_id'][0], pwoner_id, amanager_id, p['expected_revenue'],
-                    horas_estimadas
-                    # ,p['x_prev_final'], 
-                    # p['x_fecha_hito_1'], p['x_fecha_hito_2'], p['x_fecha_hito_3'],
-                    # p['x_fecha_hito_4'], p['x_fecha_hito_5'], p['x_fecha_hito_6'],
-                    # p['x_importe_hito_1'], p['x_importe_hito_2'], p['x_importe_hito_3'],
-                    # p['x_importe_hito_4'], p['x_importe_hito_5'], p['x_importe_hito_6']
-                    ,p['id'])
-            proyectos.actualizar_proyecto_completo(data)
+                    horas_estimadas,
+                    p['x_prev_final'], 
+                    p['x_fecha_hito_1'], p['x_fecha_hito_2'], p['x_fecha_hito_3'],
+                    p['x_fecha_hito_4'], p['x_fecha_hito_5'], p['x_fecha_hito_6'],
+                    p['x_importe_hito_1'], p['x_importe_hito_2'], p['x_importe_hito_3'],
+                    p['x_importe_hito_4'], p['x_importe_hito_5'], p['x_importe_hito_6'],
+                    p['id'])
+            else:
+                data = (p['display_name'],date_dead_line,
+                    p['partner_id'][0], pwoner_id, amanager_id, p['expected_revenue'],
+                    horas_estimadas,
+                    p['id'])
+            proyectos.actualizar_proyecto_completo(data, MODE_ODOO_CUSTOM)
 
 def get_mensaje_email(p):
-    url_seleccionar_plantilla = URL_APP_PROYECTOS + "/proyectos/plantilla/"+p['id']
+    url_seleccionar_plantilla = URL_APP_PROYECTOS + "/proyectos/plantilla/"+str(p['id'])
     mensaje = """Hola <br/> 
                 Se ha generado un nuevo proyecto ganado. <br/>
                 <b>%s</b>

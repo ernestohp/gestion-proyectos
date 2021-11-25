@@ -14,37 +14,39 @@ pro_bp = Blueprint('routes-proyectos', __name__)
 @pro_bp.route("/proyecto", methods=['POST', 'GET'])
 def lista_proyectos():
     pp = proyectos.lista_proyectos()
-    if pp:
+    try:
         response = jsonify(pp)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
-    return jsonify({"mensaje":"Error interno"})
+    except:
+        return jsonify({"mensaje":"Error interno"})
 
 #==========obtener un proyecto==========================
 @pro_bp.route("/proyecto/<id>", methods=['POST', 'GET'])
 def un_proyecto(id):
-    pps = proyectos.lista_proyectos()
-    proyecto1 = {}
-    if pps:
+    try:
+        pps = proyectos.lista_proyectos()
+        proyecto1 = {}        
         for p in pps:
             if(p['id']==int(id)):
                 proyecto1 = copy.deepcopy(p)
         response = jsonify(proyecto1)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
-    return jsonify({"mensaje":"Error interno"})
+    except:
+        return jsonify({"mensaje":"Error interno"})
 
 
 #==========listar clientes==========================
 @pro_bp.route("/clientes", methods=['POST', 'GET'])
 def lista_clientes():
     pp = clientes.lista_clientes()
-    if pp:
+    try:
         response = jsonify(pp)
         response.headers.add('Access-Control-Allow-Origin', '*')
-        return response
-    return jsonify({"mensaje":"Error interno"})
-
+        return response    
+    except:
+        return jsonify({"mensaje":"Error interno"})
 #==========listar personas==========================
 @pro_bp.route("/personas", methods=['POST', 'GET'])
 def lista_personas():

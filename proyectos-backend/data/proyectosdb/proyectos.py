@@ -153,29 +153,31 @@ def actualizar_proyecto_plantilla(data):
 
 
 #==========insertar una nuevo proyecto====================
-def insertar_proyecto(data):
+def insertar_proyecto(data, mode_custom_odoo):
     # print("data:", data)
     conn = create_connection()
-    sql = """
+    if mode_custom_odoo:
+        sql = """
+                INSERT INTO public."proyecto"(nombre, fecha_entrega, estado, cliente,
+                                            project_owner, account_manager, precio_venta,
+                                            x_horas_estimadas, 
+                                            x_prev_final, 
+                                            x_fecha_hito_1, x_fecha_hito_2, x_fecha_hito_3,
+                                            x_fecha_hito_4, x_fecha_hito_5, x_fecha_hito_6,
+                                            x_importe_hito_1, x_importe_hito_2, x_importe_hito_3,
+                                            x_importe_hito_4, x_importe_hito_5, x_importe_hito_6,
+                                            id)
+                VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)  
+                RETURNING id;
+                """
+    else:
+        sql = """
             INSERT INTO public."proyecto"(nombre, fecha_entrega, estado, cliente,
                                           project_owner, account_manager, precio_venta,
                                           x_horas_estimadas, id)
 	        VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)  RETURNING id;
             """
 
-    # sql = """
-    #         INSERT INTO public."proyecto"(nombre, fecha_entrega, estado, cliente,
-    #                                       project_owner, account_manager, precio_venta,
-    #                                       x_horas_estimadas, 
-    #                                       x_prev_final, 
-    #                                       x_fecha_hito_1, x_fecha_hito_2, x_fecha_hito_3,
-    #                                       x_fecha_hito_4, x_fecha_hito_5, x_fecha_hito_6,
-    #                                       x_importe_hito_1, x_importe_hito_2, x_importe_hito_3,
-    #                                       x_importe_hito_4, x_importe_hito_5, x_importe_hito_6,
-    #                                       id)
-	#         VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)  
-    #         RETURNING id;
-    #         """
 
     try:
         cur = conn.cursor()
@@ -192,29 +194,32 @@ def insertar_proyecto(data):
             conn.close()
 
 #==========actualizar descripcion del proyecto====================
-def actualizar_proyecto_completo(data):
+def actualizar_proyecto_completo(data, mode_custom_odoo):
     print("data:", data)
     conn = create_connection()
-    sql = """
-            UPDATE public."proyecto" 
-            SET nombre = (%s), fecha_entrega = (%s), cliente = (%s),
-                project_owner = (%s), account_manager = (%s), precio_venta = (%s),
-                x_horas_estimadas = (%s)
-            WHERE id = (%s)
-            """
+    sql = ""
+    if mode_custom_odoo:
+        sql = """
+                UPDATE public."proyecto" 
+                SET nombre = (%s), fecha_entrega = (%s), cliente = (%s),
+                    project_owner = (%s), account_manager = (%s), precio_venta = (%s),
+                    x_horas_estimadas = (%s),
+                    x_prev_final = (%s), 
+                    x_fecha_hito_1 = (%s), x_fecha_hito_2 = (%s), x_fecha_hito_3 = (%s),
+                    x_fecha_hito_4 = (%s), x_fecha_hito_5 = (%s), x_fecha_hito_6 = (%s),
+                    x_importe_hito_1 = (%s), x_importe_hito_2 = (%s), x_importe_hito_3 = (%s),
+                    x_importe_hito_4 = (%s), x_importe_hito_5 = (%s), x_importe_hito_6 = (%s)
+                WHERE id = (%s)
+                """
+    else:
+        sql = """
+                UPDATE public."proyecto" 
+                SET nombre = (%s), fecha_entrega = (%s), cliente = (%s),
+                    project_owner = (%s), account_manager = (%s), precio_venta = (%s),
+                    x_horas_estimadas = (%s)
+                WHERE id = (%s)
+                """
 
-    # sql = """
-    #         UPDATE public."proyecto" 
-    #         SET nombre = (%s), fecha_entrega = (%s), cliente = (%s),
-    #             project_owner = (%s), account_manager = (%s), precio_venta = (%s),
-    #             x_horas_estimadas = (%s),
-    #             x_prev_final = (%s), 
-    #             x_fecha_hito_1 = (%s), x_fecha_hito_2 = (%s), x_fecha_hito_3 = (%s),
-    #             x_fecha_hito_4 = (%s), x_fecha_hito_5 = (%s), x_fecha_hito_6 = (%s),
-    #             x_importe_hito_1 = (%s), x_importe_hito_2 = (%s), x_importe_hito_3 = (%s),
-    #             x_importe_hito_4 = (%s), x_importe_hito_5 = (%s), x_importe_hito_6 = (%s)
-    #         WHERE id = (%s)
-    #         """
     try:
         cur = conn.cursor()
         cur.execute(sql,data)

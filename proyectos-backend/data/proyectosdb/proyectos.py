@@ -156,6 +156,7 @@ def actualizar_proyecto_plantilla(data):
 def insertar_proyecto(data, mode_custom_odoo):
     # print("data:", data)
     conn = create_connection()
+    sql = ""
     if mode_custom_odoo:
         sql = """
                 INSERT INTO public."proyecto"(nombre, fecha_entrega, estado, cliente,

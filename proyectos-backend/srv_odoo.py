@@ -89,7 +89,7 @@ def get_data_from_odoo():
             data = (1,c['id'])
             personas.actualizar_project_owner(data)
 
-    #---Grabar proyectos -------
+    #---Importar proyectos ganados -------
     estado_ganado=params_odoo.ESTADO_GANADO
     lista_proyectos_db = proyectos.lista_proyectos()
     ids_proyectos_db = [a['id'] for a in lista_proyectos_db]
@@ -103,15 +103,22 @@ def get_data_from_odoo():
             pwoner_id = util.get_id(powner_emps, p['x_project_owner'])
         horas_estimadas = util.getHorasEstimadas(p)
         date_dead_line = None if not p['date_deadline'] else p['date_deadline']
+        x_prev_final = None if not p['x_prev_final'] else p['x_prev_final']
+        x_fecha_hito_1 = None if not p['x_fecha_hito_1'] else p['x_fecha_hito_1']
+        x_fecha_hito_2 = None if not p['x_fecha_hito_2'] else p['x_fecha_hito_2']
+        x_fecha_hito_3 = None if not p['x_fecha_hito_3'] else p['x_fecha_hito_3']
+        x_fecha_hito_4 = None if not p['x_fecha_hito_4'] else p['x_fecha_hito_4']
+        x_fecha_hito_5 = None if not p['x_fecha_hito_5'] else p['x_fecha_hito_5']
+        x_fecha_hito_6 = None if not p['x_fecha_hito_6'] else p['x_fecha_hito_6']
         data = None
         if p['id'] not in ids_proyectos_db:
             if MODE_ODOO_CUSTOM:
                 data = (p['display_name'],date_dead_line,estado_ganado, 
                     p['partner_id'][0], pwoner_id, amanager_id, p['expected_revenue'],
                     horas_estimadas,
-                    p['x_prev_final'], 
-                    p['x_fecha_hito_1'], p['x_fecha_hito_2'], p['x_fecha_hito_3'],
-                    p['x_fecha_hito_4'], p['x_fecha_hito_5'], p['x_fecha_hito_6'],
+                    x_prev_final, 
+                    x_fecha_hito_1, x_fecha_hito_2, x_fecha_hito_3,
+                    x_fecha_hito_4, x_fecha_hito_5, x_fecha_hito_6,
                     p['x_importe_hito_1'], p['x_importe_hito_2'], p['x_importe_hito_3'],
                     p['x_importe_hito_4'], p['x_importe_hito_5'], p['x_importe_hito_6'],
                     p['id'])
@@ -133,9 +140,9 @@ def get_data_from_odoo():
                 data = (p['display_name'],date_dead_line,
                     p['partner_id'][0], pwoner_id, amanager_id, p['expected_revenue'],
                     horas_estimadas,
-                    p['x_prev_final'], 
-                    p['x_fecha_hito_1'], p['x_fecha_hito_2'], p['x_fecha_hito_3'],
-                    p['x_fecha_hito_4'], p['x_fecha_hito_5'], p['x_fecha_hito_6'],
+                    x_prev_final, 
+                    x_fecha_hito_1, x_fecha_hito_2, x_fecha_hito_3,
+                    x_fecha_hito_4, x_fecha_hito_5, x_fecha_hito_6,
                     p['x_importe_hito_1'], p['x_importe_hito_2'], p['x_importe_hito_3'],
                     p['x_importe_hito_4'], p['x_importe_hito_5'], p['x_importe_hito_6'],
                     p['id'])

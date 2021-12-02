@@ -133,8 +133,8 @@ def add_task_to_project_id(project_id, tarea):
 def update_task(tarea_id, tarea, lockVersion):
     print("OPP, modificando la tarea %s" % tarea["nombre"])
     persona_href = None
-    if tarea['persona_id'] !=0:
-        persona_href = "/api/v3/users/%s" % tarea['persona_id']
+    # if tarea['persona_id'] !=0:
+    #     persona_href = "/api/v3/users/%s" % tarea['persona_id']
     fecha_ini = None
     if tarea["fecha_ini"] != "":
         fecha_ini = tarea["fecha_ini"]
@@ -145,6 +145,16 @@ def update_task(tarea_id, tarea, lockVersion):
     if tarea["tiempo_estimado"] != "":
         tiempo_estimado = "PT%sH" % tarea["tiempo_estimado"]
 
+    #Tipo de tarea: Task, Milestone
+    #tipo_href = "/api/v3/types/1" if t.tipo=="milestone" else "/api/v3/types/2"
+    tipo_href = "/api/v3/types/1"
+    if(tarea["tipo"]=="milestone"): 
+        tipo_href = "/api/v3/types/2"
+    else:
+        if(tarea["tipo_user"]!=""):
+            tipo_href = tarea["tipo_user"]
+
+
     res = requests.patch("%s/work_packages/%s" % (BASE_URL, tarea_id), 
                         auth=('apikey', API_TOKEN),
                         headers=HEADERS,
@@ -154,7 +164,8 @@ def update_task(tarea_id, tarea, lockVersion):
                             "startDate": fecha_ini,
                             "dueDate": fecha_fin,
                             "estimatedTime": tiempo_estimado,
-                            "assignee":{"href": persona_href}
+                            "assignee":{"href": persona_href},
+                            "type":{"href": tipo_href}
                             }
                         )
     if(res.status_code==200):

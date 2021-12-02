@@ -103,15 +103,15 @@ def add_task_to_project_id(project_id, tarea):
     if tarea["tiempo_estimado"] != "":
         tiempo_estimado = "PT%sH" % tarea["tiempo_estimado"]
     
-    #Tipo de tarea: Task, Milestone
-    #tipo_href = "/api/v3/types/1" if t.tipo=="milestone" else "/api/v3/types/2"
-    tipo_href = "/api/v3/types/1"
-    if(tarea["tipo"]=="milestone"): 
-        tipo_href = "/api/v3/types/2"
-    else:
-        if(tarea["tipo_user"]!=""):
-            tipo_href = tarea["tipo_user"]
-    print("tipo_href", tipo_href)
+    #--cambio 02-12-2021  ehp---
+    #Tipo de tarea -----
+    # tipo_href = "/api/v3/types/1"
+    # if(tarea["tipo"]=="milestone"): 
+    #     tipo_href = "/api/v3/types/2"
+    # else:
+    #     if(tarea["tipo_user"]!=""):
+    #         tipo_href = tarea["tipo_user"]
+    tipo_href = tarea["tipo_user"]
 
     res = requests.post("%s/projects/%s/work_packages" % (BASE_URL, project_id), 
                     auth=('apikey', API_TOKEN),headers=HEADERS,
@@ -145,15 +145,15 @@ def update_task(tarea_id, tarea, lockVersion):
     if tarea["tiempo_estimado"] != "":
         tiempo_estimado = "PT%sH" % tarea["tiempo_estimado"]
 
-    #Tipo de tarea: Task, Milestone
-    #tipo_href = "/api/v3/types/1" if t.tipo=="milestone" else "/api/v3/types/2"
-    tipo_href = "/api/v3/types/1"
-    if(tarea["tipo"]=="milestone"): 
-        tipo_href = "/api/v3/types/2"
-    else:
-        if(tarea["tipo_user"]!=""):
-            tipo_href = tarea["tipo_user"]
-
+    #--cambio 02-12-2021  ehp---
+    #Tipo de tarea------
+    # tipo_href = "/api/v3/types/1"
+    # if(tarea["tipo"]=="milestone"): 
+    #     tipo_href = "/api/v3/types/2"
+    # else:
+    #     if(tarea["tipo_user"]!=""):
+    #         tipo_href = tarea["tipo_user"]
+    tipo_href = tarea["tipo_user"]              
 
     res = requests.patch("%s/work_packages/%s" % (BASE_URL, tarea_id), 
                         auth=('apikey', API_TOKEN),
@@ -203,9 +203,6 @@ def delete_task(tarea_id, tarea, lockVersion):
     else:
         print("error al eliminar la tarea. Error:%s " % res.status_code)
         return 0
-
-
-
 
 
 #--------Obtener tareas de un proyecto--

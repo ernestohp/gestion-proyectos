@@ -67,13 +67,27 @@ def agregar_persona_ids(project_id, tareas):
 def agregar_persona_tipo(tareas):
     #---Obtener los email y sus tipos----
     print("OPP, Agregando tipo usuario a cada tarea...")
-    dictUsuarios = users.get_dict_email_tipo()
+    tipos_opp =  users.get_all_types()         #--cambio 02-12-2021 ehp-----
+    dictUsuarios = users.get_dict_email_tipo(tipos_opp)
     print("correos con tipo: ", dictUsuarios)
     
+    #--cambios 02-12-2021  ehp---
+    #Agregar tipos Varios y milestone----
+    href_default = users.get_type_href(tipos_opp, params_opp.TIPO_DEFECTO)
+    href_milestone = users.get_type_href(tipos_opp, params_opp.TIPO_MILESTONE)
+    print(href_default)
+    print(href_milestone)
+    
     for t in tareas:
+        print(t)
         tipo_user = ""
         if(t['email']!="") and (t['email'] in dictUsuarios):
             tipo_user = dictUsuarios[t['email']]
+        elif (t['tipo']=="milestone"):
+            tipo_user = href_milestone
+        else:
+            tipo_user = href_default
+        print(tipo_user)
         t['tipo_user'] = tipo_user
         
 

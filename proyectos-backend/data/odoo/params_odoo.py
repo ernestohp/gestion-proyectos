@@ -6,7 +6,7 @@ import xmlrpc.client
 
 #-----Parametros de Cnexion------
 URL = "https://demo3.odoo.com"
-DB = "demo_150_1636354522"
+DB = "demo_150_1638453020"
 USERNAME = "admin"
 PASSWORD = "admin"
 
@@ -16,6 +16,11 @@ COSTE_HORA = 75
 #---Estado ganado----
 ESTADO_GANADO = 100
 ETIQUETAS_AUSENCIAS = ["Local Holiday", "National Holiday", "Imascono closed"] 
+MODE_ODOO_CUSTOM = False
+
+#--cambio 02-12-2021 ehp--
+FECHA_MIN = '2021-12-01'
+#-----
 
 
 # info = xmlrpc.client.ServerProxy('https://demo.odoo.com/start').start()

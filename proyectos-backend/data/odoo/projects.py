@@ -1,11 +1,19 @@
 # import conexion_odoo
+# import params_odoo      #--cambio 02-12-2021  ehp---
 from data.odoo import conexion_odoo
+from data.odoo import params_odoo   #--cambio 02-12-2021  ehp---
 
 def get_projects_won():
     (models, db, uid, password) = conexion_odoo.create_connection()
     rs = models.execute_kw(db, uid, password,
                     'crm.lead', 'search_read',
-                    [[['won_status', '=', 'won']]],      #won, pending
+                    # [[['won_status', '=', 'won']]],      #won, pending
+                    
+                    #--cambio 02-12-2021 ehp--
+                    # [[['stage_id', '=', 4]]],  #won, pending
+                    [['&',['stage_id', '=', 4], ['create_date', '>', params_odoo.FECHA_MIN]]],
+                    #-------
+
                     # [],      #won, pending
                     # {'fields':['display_name', 'partner_name','won_status','active','stage_id',"day_close"]})
                     {'fields':['display_name', 
@@ -13,7 +21,9 @@ def get_projects_won():
                                 'partner_id',       #Cliente             #precio_hora,cantidad de horas
                                 'date_deadline',    #fecha estimada
                                 'expected_revenue', #precio venta
-                                'contact_name'
+                                'contact_name',
+                                'stage_id'
+                                ,'create_date'
                                 # ,'x_project_owner', 'x_prev_final', 'x_horas_estimadas'
                                 # 'x_fecha_hito_1', 'x_fecha_hito_2', 'x_fecha_hito_3',
                                 # 'x_fecha_hito_4', 'x_fecha_hito_5', 'x_fecha_hito_6',

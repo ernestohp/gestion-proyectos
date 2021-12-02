@@ -133,13 +133,14 @@ def get_type_href(types, name):
     return href
 
 #---Obtener dict con email y tipos-----
-def get_dict_email_tipo():
+def get_dict_email_tipo(tipos_opp): #---cambios 02-12-2021 ehp---
     email_tipo = {}
     data = cargar_json_tipos()
-    tipos_opp =  get_all_types()
+    # tipos_opp =  get_all_types()
     for d in data:
         href = get_type_href(tipos_opp, d['user_opp'])
         email_tipo[d['email']]=href
+
     return email_tipo
 
 def cargar_json_tipos():

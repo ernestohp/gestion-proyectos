@@ -1,5 +1,6 @@
 import * as Fechas from './../../util/Fechas'
 import * as Util from './../../util/Util'
+import * as Constantes from './../Constantes'
 
 export const getTareasPlantilla = (plantillaGlobal, proyecto) => {
     const tareasBD = proyecto.tareas
@@ -346,7 +347,14 @@ export const getTareasFinalOpenProject = (tareasFlat,personas) => {
                          "tiempo_estimado": "", "persona":"", "email":"", "parent":"", "tipo": "task"}
     tareasFOP.push(tareaGlobal)        
     tareasFlat.map((t)=>{
-        if(t.nombre!="GLOBAL"){
+        //---cambio 02-12-2021  ehp---
+        const tieneTodosCampos = t.persona!="0" && 
+                                 t.fecha_ini!="" && t.fecha_fin!="" && t.tiempo_estimado!=""
+        const esTareaDefecto = Constantes.TAREAS_DEFECTO_OPP.includes(t.nombre)
+        const tieneHijos = t.tiene_hijos
+        const esMilestone = (t.tipo == "milestone")
+        if((t.nombre!="GLOBAL" && tieneTodosCampos)||esTareaDefecto||tieneHijos||esMilestone){
+        //-----
             const newT = {}
             newT.nombre = t.nombre
             newT.fecha_ini = (t.fecha_ini!=null&&t.fecha_ini!="")?Fechas.fechaFormat1(t.fecha_ini):"";

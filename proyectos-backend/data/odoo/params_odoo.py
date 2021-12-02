@@ -19,7 +19,7 @@ ETIQUETAS_AUSENCIAS = ["Local Holiday", "National Holiday", "Imascono closed"]
 MODE_ODOO_CUSTOM = False
 
 #--cambio 02-12-2021 ehp--
-FECHA_MIN = '2021-12-01'
+FECHA_MIN = '2021-11-15'
 #-----
 
 

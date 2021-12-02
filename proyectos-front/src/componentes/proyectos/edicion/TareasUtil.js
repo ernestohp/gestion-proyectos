@@ -353,7 +353,8 @@ export const getTareasFinalOpenProject = (tareasFlat,personas) => {
         const esTareaDefecto = Constantes.TAREAS_DEFECTO_OPP.includes(t.nombre)
         const tieneHijos = t.tiene_hijos
         const esMilestone = (t.tipo == "milestone")
-        if((t.nombre!="GLOBAL" && tieneTodosCampos)||esTareaDefecto||tieneHijos||esMilestone){
+
+        if((t.nombre!="GLOBAL")&&((tieneTodosCampos)||esTareaDefecto||tieneHijos||esMilestone)){
         //-----
             const newT = {}
             newT.nombre = t.nombre

@@ -1,7 +1,5 @@
-import { Line, Doughnut } from 'react-chartjs-2';
 import { Chart } from "react-google-charts";
 import {Card} from 'react-bootstrap';
-import * as Util from './../../util/Util'
 
 
 const ProyectoGraficos3 = ({tareasFlatPlantilla, personas}) => {
@@ -57,7 +55,7 @@ const ProyectoGraficos3 = ({tareasFlatPlantilla, personas}) => {
     const totalHoras = buscarHorasPersona(tareasFlatPlantilla, p.id)
     if(totalHoras!=null && totalHoras!="" & totalHoras!=0){
       dataPersonas.push(totalHoras)
-      labelsPersonas.push(p.nombre)
+      labelsPersonas.push(p.name)
     }
 
   })
